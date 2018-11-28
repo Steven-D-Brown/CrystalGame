@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Crystal Game</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+
+<!-- CSS Styles (These styles are provided to you. Don't touch these!) -->
+<style>
+  body{
+      background-color: rgb(255, 240, 255);
+  }
+  #titleCard{
+      font-size: 3.2em;
+      font-weight: bolder;
+      background-color:rgb(197, 246, 246);
+      color: rgb(0, 130, 130);
+      text-align: center;
+      position: static;
+      margin-bottom: 18px;
+  }
+
+  .currentData{
+      background-color:rgb(197, 246, 246);
+      color: rgb(0, 130, 130);
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.3em;
+      width: 25%;
+      margin: 0 auto;
+      margin-bottom: 12px;
+      border-width: 2px;
+      border-color: rgb(0, 130, 130);
+      border-style:solid;
+  }
+
+  .resizedImg{
+      width: 100%;
+      height: 100%;
+      left: 0;
+      right: auto;
+  }
+
+  #instructions{
+      margin: 0 auto;
+      background-color:rgb(197, 246, 246);
+      color: rgb(0, 130, 130);
+      width: 80%;
+      font-weight: 600;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top:2px;
+      margin-bottom: 12px;
+  }
+
+  .resultTracker{
+    background-color:rgb(197, 246, 246);
+      color: rgb(0, 130, 130);
+      margin-top: 15px;
+      padding-left: 10px;
+      font-weight: bold;
+      font-size: 1.3em;
+      width: 100%;
+      margin-bottom: 12px;
+      border-width: 2px;
+      border-color: rgb(0, 130, 130);
+      border-style:solid;
+  }
+</style>
+
+<body>
+    <div id = "titleCard">Crystals Collector</div>
+    <div id = "instructions">
+        <p>A target score will be randomly generated and the gems will recieve a random value.
+        Your goal is to reach exactly the target value. If you do, you win. If your score passes it, you lose.
+        To increase your score, click one of the gems.</p>
+    </div>
+    <div class = "currentData" id = "score">Scores:</div>
+    <div class = "currentData" id = "target">Target:</div>
+    <div class = "row"> <!--row of crystals-->
+        <div class = "col-3">
+            <img class = "resizedImg" id = "ruby" src = "assets/ruby.jpg">
+        </div>
+        <div class = "col-3">
+            <img class = "resizedImg" id = "emerald" src = "assets/emerald.jpg">
+        </div>
+        <div class = "col-3">
+           <img class = "resizedImg" id = "sapphire" src = "assets/sapphire.jpg">
+        </div>
+        <div class = "col-3">
+            <img class = "resizedImg" id = "diamond" src = "assets/diamond.jpg">
+        </div>
+    </div>
+    <div class = "row"><!--Row with wins and losses display-->
+        <div class = "col-1"></div>
+        <div class = "col-4">
+            <div class = "resultTracker" id = "wins">Wins: 0</div>
+        </div>
+        <div class = "col-1"></div>
+        <div class = "col-1"></div>
+        <div class = "col-4">
+            <div class = "resultTracker" id = "losses">Losses: 0</div>
+        </div>
+        <div class = "col-1"></div>
+    </div>
+</div>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+    //declare all variables
+        //first are values for the gems: emerald, diamond, ruby, and sapphire
+        var eVal = 0;
+        var dVal = 0;
+        var rVal = 0;
+        var sVal = 0;
+
+        //track wins, losses, current score, and the target value
+        var wins = 0;
+        var losses = 0;
+        var score = 0;
+        var target = 0;
+        
+        //on click functions: increase score by gem value, update score, and check if the user won
+        $("#ruby").on("click", function(){
+            score += rVal;
+            $("#score").text("Score: " + score);
+            checkWin();
+        });
+        $("#sapphire").on("click", function(){
+            score += sVal;
+            $("#score").text("Score: " + score);
+            checkWin();
+        });
+        $("#emerald").on("click", function(){
+            score += eVal;
+            $("#score").text("Score: " + score);
+            checkWin();
+        });
+        $("#diamond").on("click", function(){
+            score+= dVal;
+            $("#score").text("Score: " + score);
+            checkWin();
+        });
+
+        start(); //game is set up, so we can begin
+
+        function start(){ //resets all resetting values and displays changed score and target values
+            score = 0;
+            $("#score").text("Score: " + score);
+            eVal = Math.floor(Math.random() * 12 + 1);
+            dVal = Math.floor(Math.random() * 12 + 1);
+            rVal = Math.floor(Math.random() * 12 + 1);
+            sVal = Math.floor(Math.random() * 12 + 1);
+            target = Math.floor(Math.random() * 102 +19);
+            $("#target").text("Target: " + target);
+        }
+
+        function checkWin(){ //checks for win or loss; if win updates and displays wins, plays a nice sound, and starts again
+            if(score === target){
+                wins++;
+                new Audio("assets/winSound.mp3").play();
+                $("#wins").text("Wins: " + wins);
+                start();
+            }
+            else if(score > target){//if loss, updates and displays losses and starts again
+                losses++;
+                $("#losses").text("Losses " + losses);
+                start();
+            }
+        }
+    });
+  </script>
+</body>
+
+</html>
